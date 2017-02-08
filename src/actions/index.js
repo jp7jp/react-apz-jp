@@ -6,6 +6,19 @@ export const contactFormUpdate = ({ prop, value }) => ({
   }
 });
 
+export const contactFetch = () => dispatch => {
+  fetch(`${process.env.REACT_APP_URL}/contacts`)
+    .then(response => response.json())
+    .then(json => {
+      console.log(json);
+
+      dispatch({
+        type: 'CONTACT_FETCH',
+        contacts: json
+      });
+    });
+};
+
 export const contactAdd = contact => dispatch => {
   fetch(`${process.env.REACT_APP_URL}/contacts`, {
     method: "POST",
@@ -19,19 +32,6 @@ export const contactAdd = contact => dispatch => {
       dispatch({
         type: 'CONTACT_ADD',
         contact
-      });
-      dispatch(contactFetch());
-    });
-};
-
-export const contactDelete = id => dispatch => {
-  fetch(`${process.env.REACT_APP_URL}/contacts/${id}`, {
-    method: "DELETE"
-  })
-    .then(() => {
-      dispatch({
-        type: 'CONTACT_DELETE',
-        id
       });
       dispatch(contactFetch());
     });
@@ -54,15 +54,15 @@ export const contactEdit = contact => dispatch => {
     });
 };
 
-export const contactFetch = () => dispatch => {
-  fetch(`${process.env.REACT_APP_URL}/contacts`)
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-
+export const contactDelete = id => dispatch => {
+  fetch(`${process.env.REACT_APP_URL}/contacts/${id}`, {
+    method: "DELETE"
+  })
+    .then(() => {
       dispatch({
-        type: 'CONTACT_FETCH',
-        contacts: json
+        type: 'CONTACT_DELETE',
+        id
       });
+      dispatch(contactFetch());
     });
 };
